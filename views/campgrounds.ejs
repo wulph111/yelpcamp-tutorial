@@ -11,10 +11,12 @@
     <% campgrounds.forEach( (c)=>{ %>
       <div class="col-md-4 col-sm-6">
         <div class="thumbnail">
-          <img src="<%=c.image%>" style="height: 200px;">
-          <div class="caption">
-            <%=c.name%>
-            </div>
+          <a href="<%=`/campgrounds/${c._id}`%>">
+            <img src="<%=c.image%>" style="height: 200px;">
+            <div class="caption">
+              <%=c.name%>
+            </a>
+          </div>
         </div>
       </div>
     <% }) %>
