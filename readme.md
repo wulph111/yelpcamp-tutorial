@@ -39,9 +39,26 @@ Each campground has:
 
 RESTFUL ROUTES
 
-name    | url          | verb   | description
---------|--------------|--------|-------------
-INDEX   | /dogs        | GET    | Display a list of all dogs
-NEW     | /dogs/new    | GET    | Display a form to make a new dog
-CREATE  | /dogs        | POST   | Add new dog to DB
-SHOW    | /dogs/:id    | GET    | Show info about one dog
+name    url              verb   description
+==========================================================
+INDEX   /dogs            GET    Display a list of all dogs
+NEW     /dogs/new        GET    Display a form to make a new dog
+CREATE  /dogs            POST   Add new dog to DB and redirect to index
+SHOW    /dogs/:id        GET    Show info about one dog
+EDIT    /dogs/:id/edit   GET    Display a form to edit a dog
+UPDATE  /dogs/:id        PUT    Save the dog cmanges and redirect to index
+DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
+
+#Refactor Mongoose Code
+* Create a models directory
+* Use module.exports
+* Require everything correctly!
+
+#Add Seeds File
+* Add a seeds.js file
+* Run the seeds file every time the server starts
+
+#Add the Comment model
+* Make our errors go away
+* Display comments on campground show page
+

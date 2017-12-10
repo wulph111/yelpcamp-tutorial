@@ -2,38 +2,17 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const Campground = require('./models/campground.js');
+const seedDB = require('./seeds.js');
 
-const DO_INIT_DB = false;
+seedDB();
 
 const host = process.env.IP || '0.0.0.0';
 const port = process.env.PORT || '8080';
 
-var initCampgrounds = [
-    {name: 'Allegany', image: 'http://thesummerlocal.com/sites/default/files/styles/full_width/public/main/articles/cabin3_WEB.jpg', description: 'Known for its two lakes and wonderful camping experiences.'},
-    {name: 'Ives Run', image: 'http://3.bp.blogspot.com/-tYyUZx04yOI/UfWxTINhhsI/AAAAAAAAIQg/OM5itatxvME/s640/1-Ives+Run+113.jpg', description: 'Surrounded by lush forested ridges, the lake offers recreation for the entire family, including picnicking, swimming, boating, fishing, hiking, hunting and wildlife watching.'},
-    {name: 'Watkins Glen', image: 'https://www.watkinsglenchamber.com/sites/default/files/styles/480x240/public/2017-07/20170724_111041.jpg?itok=OXM2asrg', description: 'Within two miles, the glen\'s stream descends 400 feet past 200-foot cliffs, generating 19 waterfalls along its course.'},
-  ];
 
 mongoose.connect('mongodb://localhost/yelp_camp', {useMongoClient: true});
 
-var campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String,
-});
-
-var Campground = mongoose.model('Campground', campgroundSchema);
-if (DO_INIT_DB) {
-  initCampgrounds.forEach( (c)=>{
-    Campground.create(c, (err, campground)=>{
-      if (err) {
-        console.log('ERROR:', err);
-      } else {
-        console.log('ADDED:', campground);
-      }
-    });
-  });
-}
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -85,7 +64,7 @@ app.post('/campgrounds', (req, res)=>{
 app.get('/campgrounds/:id', (req, res)=>{
   console.log('GET /campgrounds/' + req.params.id);
   if (req.params && req.params.id) {
-    Campground.findById(req.params.id, (err, campground)=>{
+    Campground.findById(req.params.id).populate('comments').exec((err, campground)=>{
       if (err) {
         console.log("********** ERROR:", err);
       } else {
