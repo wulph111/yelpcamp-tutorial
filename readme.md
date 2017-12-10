@@ -75,3 +75,7 @@ DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
     NEW    /campgrounds/:id/comments/new
     CREATE /campgrounds/:id/comments (POST)
     ...etc
+
+#Style Show Page
+* Add sidebar to show page
+* Display comments nicely
