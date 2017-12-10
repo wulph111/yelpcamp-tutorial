@@ -12,6 +12,10 @@ const express = require('express'),
       User = require('./models/user.js'),
       seedDB = require('./seeds.js'),
 
+      commentRoutes = require('./routes/comments.js'),
+      campgroundRoutes = require('./routes/campgrounds.js'),
+      authRoutes = require('./routes/auth.js'),
+
       host = process.env.IP || '0.0.0.0',
       port = process.env.PORT || '8080';
 
@@ -43,6 +47,9 @@ app.use((req, res, next)=>{
   next();
 });
 
+app.use(authRoutes);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/comments', commentRoutes);
 
 
 app.get('/', (req, res)=>{
@@ -54,152 +61,11 @@ app.get('/secret', (req, res)=>{
 });
 
 
-// =============
-//  CAMPGROUND ROUTES
-// =============
-// INDEX
-app.get('/campgrounds', (req, res)=>{
-  console.log(req.user);
-  Campground.find({}, (err, allCampgrounds)=>{
-    if (err) {
-      console.log("ERROR:", err);
-    } else {
-      res.render('campgrounds/index.ejs', {campgrounds: allCampgrounds});
-    }
-  });
-});
-
-// NEW
-app.get('/campgrounds/new', (req, res)=>{
-  res.render('campgrounds/new.ejs', {err: req.query.err});
-});
-
-// CREATE
-app.post('/campgrounds', (req, res)=>{
-  if (req.body && req.body.name && req.body.image) {
-    Campground.create({
-      name: req.body.name,
-      image: req.body.image,
-      description: req.body.desc,
-    }, (err, newlyCreated)=>{
-      if (err) {
-        res.redirect('/campgrounds/new?err=Error,+cannot+create+new+campground');
-      } else {
-        res.redirect('/campgrounds');
-      }
-    });
-  } else {
-    res.redirect('/campgrounds/new?err=Error,+need+name+and+image+URL');
-  }
-});
-
-// SHOW
-app.get('/campgrounds/:id', (req, res)=>{
-  console.log('GET /campgrounds/' + req.params.id);
-  if (req.params && req.params.id) {
-    Campground.findById(req.params.id).populate('comments').exec((err, campground)=>{
-      if (err) {
-        console.log("********** ERROR:", err);
-      } else {
-        console.log("campground:", campground);
-        res.render('campgrounds/detail.ejs', {campground});
-      }
-    });
-  } else {
-    res.send(`${req.parms.id} NOT FOUND`);
-  }
-});
 
 
-// ==============
-//  COMMENTS ROUTES
-// ==============
-// NEW
-app.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res)=>{
-  Campground.findById(req.params.id, (err, campground)=>{
-    if (err)
-      console.log("ERROR", err);
-    else {
-      res.render('comments/new.ejs', {campground});
-    }
-  });
-});
-
-//CREATE
-app.post('/campgrounds/:id/comments', isLoggedIn, (req, res)=>{
-  Campground.findById(req.params.id, (err, campground)=>{
-    if (err) {
-      console.log('ERROR', err);
-    } else {
-      Comment.create(req.body.comment, (err, comment)=>{
-        if (err) {
-          console.log('ERROR', err);
-        } else {
-          campground.comments.push(comment);
-          campground.save();
-          res.redirect(`/campgrounds/${req.params.id}`);
-        }
-      });
-    }
-  });
-});
 
 
-// ==============
-//  AUTH ROUTES
-// ==============
 
-// show registration form
-app.get('/register', (req, res)=>{
-  res.render("register.ejs");
-});
-
-// process registration form
-app.post('/register', (req, res)=>{
-  var newUser = new User({username: req.body.username});
-  User.register(newUser, req.body.password, (err, user)=>{
-    if (err) {
-      console.log(err);
-      return res.render('register.ejs');
-    }
-    passport.authenticate('local')(req, res, ()=>{
-      res.redirect('/campgrounds');
-    });
-  });
-});
-
-// show login form
-app.get('/login', (req, res)=>{
-  res.render("login.ejs");
-});
-
-// process login form
-//app.post(route, middleware, callback)
-app.post('/login',
-  passport.authenticate('local',
-    {
-      successRedirect: '/campgrounds',
-      failureRedirect: '/login'
-    }
-  ), (req, res)=>{
-    // do nothing
-  }
-);
-
-// process logout
-app.get('/logout', (req, res)=>{
-  req.logout();
-  res.redirect('/campgrounds');
-});
-
-
-// middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
 
 app.listen(port, host, ()=>{
   console.log(`Listening on ${host}:${port}`);

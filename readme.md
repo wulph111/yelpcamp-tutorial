@@ -102,3 +102,6 @@ DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
 * Add links to navbar
 * Show/hide auth links correctly
 
+# Refactor the Routes
+* Use Express Router to reorganize all routes
+

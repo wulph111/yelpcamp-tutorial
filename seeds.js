@@ -31,7 +31,6 @@ function seedDB() {
       console.log('ERROR', err);
     } else {
       console.log('Removed All Campgrounds');
-
       //Add sample campgrounds
       initCampgrounds.forEach( (c)=>{
         Campground.create(c, (err, campground)=>{
