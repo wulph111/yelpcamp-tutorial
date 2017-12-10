@@ -1,0 +1,16 @@
+<% include ../partials/header.ejs %>
+
+<div class="container">
+  <h1><%=campground.name%></h1>
+  <p><%=campground.description%></p>
+  <img src="<%=campground.image%>"></img>
+  <a href="/campgrounds/<%=campground.id%>/comments/new" class="btn btn-success">Add a Comment</a>
+</div>
+
+<% campground.comments.forEach((e)=>{ %>
+<div>
+  <strong><%= e.author %></strong> - <%= e.text %>
+</div>
+<% }); %>
+
+<% include ../partials/footer.ejs %>

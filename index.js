@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Campground = require('./models/campground.js');
+const Comment = require('./models/comment.js');
 const seedDB = require('./seeds.js');
 
 seedDB();
@@ -25,20 +26,24 @@ app.get('/secret', (req, res)=>{
   res.send("<h1>shh it's a secret</h1>");
 });
 
+
+// =============
+//  CAMPGROUND ROUTES
+// =============
 // INDEX
 app.get('/campgrounds', (req, res)=>{
   Campground.find({}, (err, allCampgrounds)=>{
     if (err) {
       console.log("ERROR:", err);
     } else {
-      res.render('campgrounds.ejs', {campgrounds: allCampgrounds});
+      res.render('campgrounds/index.ejs', {campgrounds: allCampgrounds});
     }
   });
 });
 
 // NEW
 app.get('/campgrounds/new', (req, res)=>{
-  res.render('addCampground.ejs', {err: req.query.err});
+  res.render('campgrounds/new.ejs', {err: req.query.err});
 });
 
 // CREATE
@@ -69,12 +74,46 @@ app.get('/campgrounds/:id', (req, res)=>{
         console.log("********** ERROR:", err);
       } else {
         console.log("campground:", campground);
-        res.render('showCampground.ejs', {campground});
+        res.render('campgrounds/detail.ejs', {campground});
       }
     });
   } else {
     res.send(`${req.parms.id} NOT FOUND`);
   }
+});
+
+
+// ==============
+//  COMMENTS ROUTES
+// ==============
+// NEW
+app.get('/campgrounds/:id/comments/new', (req, res)=>{
+  Campground.findById(req.params.id, (err, campground)=>{
+    if (err)
+      console.log("ERROR", err);
+    else {
+      res.render('comments/new.ejs', {campground});
+    }
+  });
+});
+
+//CREATE
+app.post('/campgrounds/:id/comments', (req, res)=>{
+  Campground.findById(req.params.id, (err, campground)=>{
+    if (err) {
+      console.log('ERROR', err);
+    } else {
+      Comment.create(req.body.comment, (err, comment)=>{
+        if (err) {
+          console.log('ERROR', err);
+        } else {
+          campground.comments.push(comment);
+          campground.save();
+          res.redirect(`/campgrounds/${req.params.id}`);
+        }
+      });
+    }
+  });
 });
 
 app.listen(port, host, ()=>{

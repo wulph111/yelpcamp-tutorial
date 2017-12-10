@@ -62,3 +62,16 @@ DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
 * Make our errors go away
 * Display comments on campground show page
 
+#Comment New/Create
+* Discuss nested routes
+* Add the comment new and create routes
+* Add the new comment form
+
+    INDEX  /campgrounds
+    NEW    /campgrounds/new
+    CREATE /campgrounds (POST)
+    SHOW   /campgrounds/:id
+
+    NEW    /campgrounds/:id/comments/new
+    CREATE /campgrounds/:id/comments (POST)
+    ...etc
