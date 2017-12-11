@@ -7,42 +7,45 @@ middlewareObj.isLoggedIn = (req, res, next)=>{
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+  req.flash('danger', 'Please log in first!');
+  return res.redirect('/login');
 }
 
 middlewareObj.checkCampgroundOwnership = (req, res, next)=>{
   if (req.isAuthenticated()) {
     Campground.findById(req.params.id, (err, campground)=>{
-      if (err) {
-        console.log('checkCampgroundOwnership: can\'t find campground: ', err);
+      if (err || !campground) {
+        req.flash('danger', 'Can\'t find campground');
         return res.redirect('back');
       }
       if (campground.author._id.equals(req.user.id)) {
         return next();
-      } else {
-        res.send("YOU ARE NOT AUTHORIZED TO EDIT THIS CAMPGROUND");
       }
+      req.flash('danger', 'You are not authorized to edit this campground');
+      return res.redirect('back');
     });
   } else {
-    res.send("YOU NEED TO BE LOGGED IN TO EDIT CAMPGROUND");
+    req.flash('danger', 'You need to be logged in to edit campgrounds');
+    res.redirect('back');
   }
 }
 
 middlewareObj.checkCommentOwnership = (req, res, next)=>{
   if (req.isAuthenticated()) {
     Comment.findById(req.params.comment_id, (err, comment)=>{
-      if (err) {
-        console.log('checkCommentOwnership: can\'t find comment: ', err);
+      if (err || !comment) {
+        req.flash('danger','Can\'t find comment');
         return res.redirect('back');
       }
       if (comment.author.id.equals(req.user.id)) {
         return next();
-      } else {
-        res.send("YOU ARE NOT AUTHORIZED TO EDIT THIS COMMENT");
       }
+      req.flash('danger','You are not authorized to edit this comment');
+      res.redirect('back');
     });
   } else {
-    res.send("YOU NEED TO BE LOGGED IN TO EDIT COMMENTS");
+    req.flash('danger','You need to be logged in to edit comments');
+    res.redirect('back');
   }
 }
 

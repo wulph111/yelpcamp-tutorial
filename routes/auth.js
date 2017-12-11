@@ -17,10 +17,13 @@ router.post('/register', (req, res)=>{
   var newUser = new User({username: req.body.username});
   User.register(newUser, req.body.password, (err, user)=>{
     if (err) {
-      console.log(err);
-      return res.render('register.ejs');
+      req.flash('danger', err.message);
+      const rf = req.flash();
+      console.log(`/register POST flash=`, rf);
+      return res.render('register.ejs', {msgs: rf});
     }
     passport.authenticate('local')(req, res, ()=>{
+      req.flash('success', `Welcome to YelpCamp, ${user.username}`);
       res.redirect('/');
     });
   });
@@ -36,8 +39,11 @@ router.get('/login', (req, res)=>{
 router.post('/login',
   passport.authenticate('local',
     {
-      successRedirect: '/',
-      failureRedirect: '/login'
+      successRedirect: '/campgrounds',
+      failureRedirect: '/login',
+      successFlash: 'LOGIN SUCCESSFUL',
+      failureFlash: true, //could also be a string message
+      //
     }
   ), (req, res)=>{
     // do nothing
@@ -46,8 +52,11 @@ router.post('/login',
 
 // process logout
 router.get('/logout', (req, res)=>{
+
+  req.user && req.flash('success', `Goodbye, ${req.user.username}`);
+  req.flash('success', 'Another message.');
   req.logout();
-  res.redirect('/campgrounds');
+  res.redirect('/');
 });
 
 module.exports = router;

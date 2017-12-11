@@ -27,4 +27,15 @@
 </nav>
 
 
-<h4><%=locals.currentUser%></h4>
+<% if (locals.msgs) { %>
+  <div class="container">
+    <% for (type in msgs) {
+        msgs[type].forEach(msg=>{
+          if (type == 'error') {type = 'danger';} %>
+          <div class="alert alert-<%=type%>"><%=msg%></div>
+    <%  });
+       }  %>
+  </div>
+<% } else { %>
+<h4>No messages</h4>
+<% } %>

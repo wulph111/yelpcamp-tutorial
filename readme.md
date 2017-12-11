@@ -143,5 +143,11 @@ DESTROY /dogs/:id        DELETE Remove a dog and redirect to index
 * Hide/show edit and delete buttons
 * Refactor middleware
 
+# Adding in flash messages
+* Install and configure connect-flash
+* Add bootstrap alerts to header
+
+
+
 
 

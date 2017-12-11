@@ -5,6 +5,7 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
       methodOverride = require('method-override'),
+      connectFlash = require('connect-flash'),
 
       app = express(),
 
@@ -30,6 +31,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(`${__dirname}/public`));
 app.use(methodOverride('_method', { methods: ['POST', 'GET'] }));
+app.use(connectFlash());
 
 // PASSPORT CONFIGURATION
 app.use(session({
@@ -46,6 +48,11 @@ passport.deserializeUser(User.deserializeUser());
 //Apply this middleware to every route
 app.use((req, res, next)=>{
   res.locals.currentUser = req.user;
+  res.locals.msgs = req.flash();
+  console.log(
+    'req:', req.method, req.url, '\n',
+    'msgs:', res.locals.msgs, '\n'
+    );
   next();
 });
 
@@ -55,9 +62,9 @@ app.use('/campgrounds/:id/comments', commentRoutes);
 
 
 app.get('/', (req, res)=>{
-  if (req.isAuthenticated()) {
-    return res.redirect('/campgrounds');
-  }
+  // if (req.isAuthenticated()) {
+  //   return res.redirect('/campgrounds');
+  // }
   return res.render("landing.ejs");
 });
 
