@@ -21,7 +21,7 @@ router.post('/register', (req, res)=>{
       return res.render('register.ejs');
     }
     passport.authenticate('local')(req, res, ()=>{
-      res.redirect('/campgrounds');
+      res.redirect('/');
     });
   });
 });
@@ -36,7 +36,7 @@ router.get('/login', (req, res)=>{
 router.post('/login',
   passport.authenticate('local',
     {
-      successRedirect: '/campgrounds',
+      successRedirect: '/',
       failureRedirect: '/login'
     }
   ), (req, res)=>{

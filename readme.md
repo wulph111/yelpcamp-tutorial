@@ -47,7 +47,7 @@ CREATE  /dogs            POST   Add new dog to DB and redirect to index
 SHOW    /dogs/:id        GET    Show info about one dog
 EDIT    /dogs/:id/edit   GET    Display a form to edit a dog
 UPDATE  /dogs/:id        PUT    Save the dog cmanges and redirect to index
-DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
+DESTROY /dogs/:id        DELETE Remove a dog and redirect to index
 
 # Refactor Mongoose Code
 * Create a models directory
@@ -112,4 +112,36 @@ DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
 # Users + Campgrounds
 * Prevent an unauthenticated user from creating a campground
 * Save username+id to newly created campground
+
+# Editing Campgrounds
+* Add Method-Override
+* Add Edit route for Campgrounds
+* Add Link to Edit Page
+* Add Update route
+* Fix $set problem
+
+# Deleting Campgrounds
+* Add Destroy Route
+* Add Delete Button
+
+# Authorization
+* User can only edit his/her campgrounds
+* User can only delete his/her campgrounds
+* Hide/Show edit and delete buttons
+
+# Editing Comments
+* Add Edit route for comments
+* Add Edit buttons
+* Add Update route
+
+# Deleting Comments
+* Add Destroy route
+* Add Delete button
+
+# Comment Authorization
+* User can only edit/delete his/her comments
+* Hide/show edit and delete buttons
+* Refactor middleware
+
+
 

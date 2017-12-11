@@ -1,5 +1,5 @@
 .caption-full {
-  padding: 0 15px;
+  padding: 15px;
 }
 
 .thumbnail {
@@ -8,4 +8,8 @@
 
 .img-responsive {
   width: 100%;
+}
+
+.inline-form {
+  display: inline;
 }

@@ -1,6 +1,7 @@
 const express = require('express'),
       router = express.Router(),
-      Campground = require('../models/campground.js');
+      Campground = require('../models/campground.js'),
+      middleware = require('../middleware/middleware.js');
 
 
 // =============
@@ -20,12 +21,12 @@ router.get('/', (req, res)=>{
 });
 
 // NEW
-router.get('/new', isLoggedIn, (req, res)=>{
+router.get('/new', middleware.isLoggedIn, (req, res)=>{
   res.render('campgrounds/new.ejs', {err: req.query.err});
 });
 
 // CREATE
-router.post('/', isLoggedIn, (req, res)=>{
+router.post('/', middleware.isLoggedIn, (req, res)=>{
   Campground.create({
     name: req.body.name,
     image: req.body.image,
@@ -57,13 +58,35 @@ router.get('/:id', (req, res)=>{
   }
 });
 
-// middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
+// EDIT
+router.get('/:id/edit', middleware.checkCampgroundOwnership, (req, res)=>{
+  Campground.findById(req.params.id, (err, campground)=>{
+    if (err) { // should not occur because we verified this in the middleware already
+      return res.redirect('back');
+    }
+    res.render('campgrounds/edit.ejs', {campground});
+  });
+});
 
+// UPDATE
+router.put('/:id', middleware.checkCampgroundOwnership, (req, res)=>{
+  Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground)=>{
+    if (err) {
+      return res.redirect('/campgrounds');
+    }
+    return res.redirect(`/campgrounds/${campground._id}`);
+  });
+});
+
+// DESTROY
+router.delete('/:id', middleware.checkCampgroundOwnership, (req, res)=>{
+  Campground.findByIdAndRemove(req.params.id, (err, campground)=>{
+      if (err) {
+        console.log('DELETE CAMPGROUND ERROR: ', err);
+        return res.redirect(`/campgrounds/${campground._id}`);
+      }
+      return res.redirect('/campgrounds');
+  });
+});
 
 module.exports = router;

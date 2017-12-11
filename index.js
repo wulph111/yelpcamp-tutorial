@@ -4,6 +4,7 @@ const express = require('express'),
       LocalStrategy = require('passport-local'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
+      methodOverride = require('method-override'),
 
       app = express(),
 
@@ -28,6 +29,7 @@ mongoose.connect('mongodb://localhost/yelp_camp', {useMongoClient: true});
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(`${__dirname}/public`));
+app.use(methodOverride('_method', { methods: ['POST', 'GET'] }));
 
 // PASSPORT CONFIGURATION
 app.use(session({
@@ -53,7 +55,10 @@ app.use('/campgrounds/:id/comments', commentRoutes);
 
 
 app.get('/', (req, res)=>{
-  res.render("landing.ejs");
+  if (req.isAuthenticated()) {
+    return res.redirect('/campgrounds');
+  }
+  return res.render("landing.ejs");
 });
 
 app.get('/secret', (req, res)=>{
