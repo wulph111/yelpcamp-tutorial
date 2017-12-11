@@ -37,17 +37,17 @@ Each campground has:
 * Show db.collection.drop()
 * Add a show route/templates
 
-RESTFUL ROUTES
-
-name    url              verb   description
-==========================================================
-INDEX   /dogs            GET    Display a list of all dogs
-NEW     /dogs/new        GET    Display a form to make a new dog
-CREATE  /dogs            POST   Add new dog to DB and redirect to index
-SHOW    /dogs/:id        GET    Show info about one dog
-EDIT    /dogs/:id/edit   GET    Display a form to edit a dog
-UPDATE  /dogs/:id        PUT    Save the dog cmanges and redirect to index
-DESTROY /dogs/:id        DELETE Remove a dog and redirect to index
+## RESTFUL ROUTES
+name    | url              | verb   | description
+--------|------------------|--------|-------------
+INDEX   | /dogs            | GET    | Display a list of all dogs
+NEW     | /dogs/new        | GET    | Display a form to make a new dog
+CREATE  | /dogs            | POST   | Add new dog to DB and redirect to index
+SHOW    | /dogs/:id        | GET    | Show info about one dog
+EDIT    | /dogs/:id/edit   | GET    | Display a form to edit a dog
+&nbsp;  |                  |        | &nbsp;
+UPDATE  | /dogs/:id        | PUT    | Save the dog cmanges and redirect to index
+DESTROY | /dogs/:id        | DELETE | Remove a dog and redirect to index
 
 # Refactor Mongoose Code
 * Create a models directory
@@ -67,14 +67,15 @@ DESTROY /dogs/:id        DELETE Remove a dog and redirect to index
 * Add the comment new and create routes
 * Add the new comment form
 
-    INDEX  /campgrounds
-    NEW    /campgrounds/new
-    CREATE /campgrounds (POST)
-    SHOW   /campgrounds/:id
-
-    NEW    /campgrounds/:id/comments/new
-    CREATE /campgrounds/:id/comments (POST)
-    ...etc
+ Method | Route
+   ---: | ---
+ INDEX  | /campgrounds
+ NEW    | /campgrounds/new
+ CREATE | /campgrounds (POST)
+ SHOW   | /campgrounds/:id
+NEW     | /campgrounds/:id/comments/new
+CREATE  | /campgrounds/:id/comments (POST)
+...etc  | &nbsp;
 
 # Style Show Page
 * Add sidebar to show page
@@ -154,5 +155,7 @@ DESTROY /dogs/:id        DELETE Remove a dog and redirect to index
 # Dynamic Price feature
 
 
+# Additional customizations with Ian
+* https://www.udemy.com/the-web-developer-bootcamp/learn/v4/questions/2078848
 
 
