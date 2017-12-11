@@ -1,0 +1,28 @@
+<% include ../partials/header.ejs %>
+
+<div class="container text-center">
+  <h1>Edit <%=campground.name%></h1>
+
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-4">
+      <form method="POST" action="/campgrounds/<%=campground.id%>?_method=put">
+        <input class="form-control form-group" value="<%=campground.name%>" name="campground[name]" autofocus>
+        <input class="form-control form-group" value="<%=campground.image%>" name="campground[image]">
+        <textarea class="form-control form-group" name="campground[description]"><%=campground.description%></textarea>
+        <input class="btn btn-lg btn-primary btn-block form-group" type="submit">
+      </form>
+      <p></p>
+      <p class="text-left"><a href="/campgrounds">View All Campgrounds</a></p>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<!--<%// if (err) { %>-->
+<!--<script>alert("<%//=err%>");</script>-->
+<!--<%// } %>-->
+
+<% include ../partials/footer.ejs %>
