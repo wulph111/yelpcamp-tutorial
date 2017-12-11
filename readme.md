@@ -147,6 +147,11 @@ DESTROY /dogs/:id        DELETE Remove a dog and redirect to index
 * Install and configure connect-flash
 * Add bootstrap alerts to header
 
+# Update Landing Page
+* background image slideshow with cross-fade effect
+* https://github.com/nax3t/background-slider
+
+# Dynamic Price feature
 
 
 
