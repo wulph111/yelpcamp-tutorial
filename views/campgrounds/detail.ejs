@@ -20,7 +20,8 @@
             <a href=""><%= campground.name %></a>
             <span class="pull-right">$900/night</span>
           </h4>
-          <p><%- campground.description %></p>
+          <p><%- campground.description %>
+          <span class="pull-right">added by <%= campground.author.username %></span></p>
         </div>
       </div>
       <div class="well">

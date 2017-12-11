@@ -9,6 +9,7 @@ const express = require('express'),
 // INDEX
 router.get('/', (req, res)=>{
   console.log(req.user);
+  console.log(typeof req.user);
   Campground.find({}, (err, allCampgrounds)=>{
     if (err) {
       console.log("ERROR:", err);
@@ -19,27 +20,24 @@ router.get('/', (req, res)=>{
 });
 
 // NEW
-router.get('/new', (req, res)=>{
+router.get('/new', isLoggedIn, (req, res)=>{
   res.render('campgrounds/new.ejs', {err: req.query.err});
 });
 
 // CREATE
-router.post('/', (req, res)=>{
-  if (req.body && req.body.name && req.body.image) {
-    Campground.create({
-      name: req.body.name,
-      image: req.body.image,
-      description: req.body.desc,
-    }, (err, newlyCreated)=>{
-      if (err) {
-        res.redirect('/new?err=Error,+cannot+create+new+campground');
-      } else {
-        res.redirect('/');
-      }
-    });
-  } else {
-    res.redirect('/new?err=Error,+need+name+and+image+URL');
-  }
+router.post('/', isLoggedIn, (req, res)=>{
+  Campground.create({
+    name: req.body.name,
+    image: req.body.image,
+    description: req.body.desc,
+    author: req.user,
+  }, (err, newlyCreated)=>{
+    if (err) {
+      res.redirect('/new?err=Error,+cannot+create+new+campground');
+    } else {
+      res.redirect(`/campgrounds/${newlyCreated._id}`);
+    }
+  });
 });
 
 // SHOW
@@ -50,6 +48,7 @@ router.get('/:id', (req, res)=>{
       if (err) {
         console.log("********** ERROR:", err);
       } else {
+        console.log(campground);
         res.render('campgrounds/detail.ejs', {campground});
       }
     });
@@ -57,5 +56,14 @@ router.get('/:id', (req, res)=>{
     res.send(`${req.parms.id} NOT FOUND`);
   }
 });
+
+// middleware
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
 
 module.exports = router;
