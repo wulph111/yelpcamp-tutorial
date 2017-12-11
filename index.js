@@ -19,7 +19,7 @@ const express = require('express'),
       host = process.env.IP || '0.0.0.0',
       port = process.env.PORT || '8080';
 
-seedDB();
+// seedDB();
 
 
 mongoose.connect('mongodb://localhost/yelp_camp', {useMongoClient: true});

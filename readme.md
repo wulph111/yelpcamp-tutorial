@@ -105,3 +105,6 @@ DESTROY /dogs/:id/delete DELETE Remove a dog and redirect to index
 # Refactor the Routes
 * Use Express Router to reorganize all routes
 
+# Users + Comments
+* Associate users and comments
+* Save author's name to a comment automatically

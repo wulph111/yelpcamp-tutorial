@@ -50,7 +50,6 @@ router.get('/:id', (req, res)=>{
       if (err) {
         console.log("********** ERROR:", err);
       } else {
-        console.log("campground:", campground);
         res.render('campgrounds/detail.ejs', {campground});
       }
     });
